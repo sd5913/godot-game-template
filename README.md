@@ -28,6 +28,27 @@ its matching platform. No store or signing credentials are needed for these
 artifacts. Mobile exports require separate SDKs, platform configuration and
 signing. See [Godot export documentation](https://docs.godotengine.org/en/4.5/tutorials/export/index.html).
 
+## Publish a versioned release
+
+When your team is ready to share a tested build, push a version tag:
+
+```bash
+git switch main
+git pull origin main
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+Use `vMAJOR.MINOR.PATCH` (for example, `v1.0.0`). Actions first exports the
+project; if the build succeeds it creates a GitHub Release with `web.zip`,
+`linux.zip` and `windows.zip`. Find them under your repository's **Releases**.
+Run the executable with its accompanying `.pck` file; serve the web files over
+HTTP. These are unsigned desktop builds, and mobile/iOS releases need separate
+SDK and signing setup. Run the workflow manually to download a `release-preview` artifact without
+publishing a release. A new release needs a new tag. Keep Actions enabled and
+allow the workflow's `GITHUB_TOKEN` contents-write permission. A tag creates a
+public release in a public repository; push it only when ready to publish.
+
 ## Codex cloud environment
 
 Connect GitHub, create a new task and choose **Work in → Cloud → Select
