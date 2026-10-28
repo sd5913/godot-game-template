@@ -1,0 +1,25 @@
+name: Check and export
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - run: .codex/setup.sh
+      - name: Export web and desktop
+        run: |
+          GODOT="$HOME/.cache/sd5913-godot-4.5.1/godot"
+          mkdir -p build/web build/linux build/windows && touch build/.gdignore
+          "$GODOT" --headless --path . --export-release Web build/web/index.html
+          "$GODOT" --headless --path . --export-release Linux build/linux/game.x86_64
+          "$GODOT" --headless --path . --export-release Windows build/windows/game.exe
+      - uses: actions/upload-artifact@v4
+        with:
+          name: game-exports
+          path: build/
